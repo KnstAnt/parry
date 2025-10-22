@@ -464,7 +464,11 @@ fn triangulate_constraints_and_merge_duplicates(
             utils::sanitize_spade_point(point_proj)
         })
         .collect();
-    let cdt_triangulation = ConstrainedDelaunayTriangulation::bulk_load_cdt(planar_points, edges)?;
+    let mut _conflicting_edges = Vec::new();
+    let cdt_triangulation =
+        ConstrainedDelaunayTriangulation::try_bulk_load_cdt(planar_points, edges, |e| {
+            _conflicting_edges.push(e) //TODO
+        })?;
     debug_assert!(cdt_triangulation.vertices().len() == points.len());
 
     let points = points.into_iter().map(|p| Point3::from(p.point)).collect();
