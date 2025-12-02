@@ -582,6 +582,9 @@ impl TriMesh {
                 let mut next = neighbors.first(); // Arbitrary neighbor
 
                 'traversal: while let Some(current) = next {
+                    if seen[*current] {
+                        break;
+                    }  
                     seen[*current] = true;
                     polyline_indices.push([prev as u32, *current as u32]);
 
